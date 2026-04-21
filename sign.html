@@ -1,80 +1,136 @@
-<script>
-  const canvas = document.getElementById('signature-canvas');
-  const ctx = canvas.getContext('2d');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Your Vehicle Rental Agreement</title>
+  <meta name="viewport" content="width=device‑width,initial‑scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0;
+      font-family: 'DM Sans', Arial, sans-serif;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    canvas {
+      width: 100%;
+      height: 120px;
+      border: 2px solid #bdbdbd;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+    button {
+      padding: 12px 20px;
+      background: radial-gradient(circle 300px at 50% 70%, #444, #000);
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      margin: 5px 0;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: 'DM Sans', Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Sign your Vehicle Rental Agreement</h2>
+    <canvas id="signature-canvas"></canvas>
+    <button id="clear-btn">✖ Clear</button>
+    <button id="save-btn">✓ Save Signature</button>
+  </div>
 
-  // High‑dpi canvas
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = canvas.offsetWidth * dpr;
-  canvas.height = canvas.offsetHeight * dpr;
-  ctx.scale(dpr, dpr);
+  <script>
+    // 1. Get the canvas by id (MUST match your HTML)
+    const canvas = document.getElementById('signature-canvas');
+    const ctx = canvas.getContext('2d');
 
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.lineWidth = 2;
+    // 2. High‑dpi scaling
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.offsetWidth * dpr;
+    canvas.height = canvas.offsetHeight * dpr;
+    ctx.scale(dpr, dpr);
 
-  let isDrawing = false;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 2;
 
-  canvas.addEventListener('mousedown', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    isDrawing = true;
-  });
+    let isDrawing = false;
 
-  canvas.addEventListener('mousemove', (e) => {
-    if (!isDrawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  });
+    // 3. Mouse handlers
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      isDrawing = true;
+    });
 
-  function stopDraw() {
-    isDrawing = false;
-    ctx.beginPath();
-  }
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
 
-  canvas.addEventListener('mouseup', stopDraw);
-  canvas.addEventListener('mouseout', stopDraw);
+    function stopDraw() {
+      isDrawing = false;
+      ctx.beginPath();
+    }
 
-  // Touch support
-  canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    isDrawing = true;
-  });
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseout', stopDraw);
 
-  canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (!isDrawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  });
+    // 4. Touch handlers
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      isDrawing = true;
+    });
 
-  canvas.addEventListener('touchend', () => {
-    isDrawing = false;
-    ctx.beginPath();
-  });
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
 
-  document.getElementById('clear-btn').onclick = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  };
+    canvas.addEventListener('touchend', () => {
+      isDrawing = false;
+      ctx.beginPath();
+    });
 
-  document.getElementById('save-btn').onclick = () => {
-    const png = canvas.toDataURL('image/png');
-    console.log('Signature PNG:', png);
-    alert('Signature saved! Check console for PNG data URL.');
-  };
-</script>
+    // 5. Clear / Save
+    document.getElementById('clear-btn').onclick = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+
+    document.getElementById('save-btn').onclick = () => {
+      const png = canvas.toDataURL('image/png');
+      console.log('Signature PNG:', png);
+      alert('Signature saved! Check DevTools → Console for PNG data URL.');
+    };
+  </script>
+</body>
+</html>
