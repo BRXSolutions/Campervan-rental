@@ -126,6 +126,8 @@
     ctx.lineWidth = 2;
 
     let isDrawing = false;
+    let currentStrokeStart = null;
+    let strokes = []; // [{ lx, ly, mx, my }, ...]
 
     function getClientPos(e) {
       const rect = canvas.getBoundingClientRect();
@@ -138,29 +140,45 @@
       return { x, y };
     }
 
+    // 3. Start drawing (new stroke)
     canvas.addEventListener('mousedown', (e) => {
       const pos = getClientPos(e);
       ctx.beginPath();
       ctx.moveTo(pos.x, pos.y);
+      currentStrokeStart = { x: pos.x, y: pos.y };
       isDrawing = true;
     });
 
+    // 4. Draw line segments and record them
     canvas.addEventListener('mousemove', (e) => {
       if (!isDrawing) return;
       const pos = getClientPos(e);
       ctx.lineTo(pos.x, pos.y);
       ctx.stroke();
+
+      // Record this segment
+      if (currentStrokeStart) {
+        strokes.push({
+          mx: currentStrokeStart.x,
+          my: currentStrokeStart.y,
+          lx: pos.x,
+          ly: pos.y
+        });
+        // currentStrokeStart becomes the new start
+        currentStrokeStart = { x: pos.x, y: pos.y };
+      }
     });
 
     function stopDraw() {
       isDrawing = false;
+      currentStrokeStart = null;
       ctx.beginPath();
     }
 
     canvas.addEventListener('mouseup', stopDraw);
     canvas.addEventListener('mouseout', stopDraw);
 
-    // Touch support
+    // 5. Touch support
     canvas.addEventListener('touchstart', (e) => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
@@ -169,6 +187,7 @@
       const y = touch.clientY - rect.top;
       ctx.beginPath();
       ctx.moveTo(x, y);
+      currentStrokeStart = { x, y };
       isDrawing = true;
     });
 
@@ -181,19 +200,31 @@
       const y = touch.clientY - rect.top;
       ctx.lineTo(x, y);
       ctx.stroke();
+
+      if (currentStrokeStart) {
+        strokes.push({
+          mx: currentStrokeStart.x,
+          my: currentStrokeStart.y,
+          lx: x,
+          ly: y
+        });
+        currentStrokeStart = { x, y };
+      }
     });
 
     canvas.addEventListener('touchend', () => {
       isDrawing = false;
+      currentStrokeStart = null;
       ctx.beginPath();
     });
 
-    // 3. Clear signature
+    // 6. Clear strokes
     document.getElementById('clear-btn').onclick = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      strokes = [];
     };
 
-    // 4. Save signature → send to Activepieces
+    // 7. Save signature → send to Activepieces
     document.getElementById('save-btn').onclick = () => {
       if (!authData || !authData.reservationRef) {
         document.getElementById('error').style.display = 'block';
@@ -204,13 +235,27 @@
         return;
       }
 
+      if (strokes.length === 0) {
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').innerHTML = `
+          ❌ Signature is empty.<br>
+          Please draw your signature.
+        `;
+        return;
+      }
+
+      // Build the RCM‑style signaturejson
+      const signaturejson = JSON.stringify(strokes);
+
+      // You can also send PNG for preview/logging if needed
       const pngDataUrl = canvas.toDataURL('image/png');
 
       const payload = {
         bookingNum: authData.bookingNum,
         lastName: authData.lastName,
         reservationRef: authData.reservationRef,
-        signature: pngDataUrl,
+        signaturejson,
+        signature: pngDataUrl,     // optional extra for your system
         signatureTimestamp: Date.now()
       };
 
