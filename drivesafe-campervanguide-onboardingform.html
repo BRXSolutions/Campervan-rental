@@ -218,8 +218,9 @@ function handleDetailsCorrect() {
   document.getElementById('booking-details').style.display = 'none';
   document.getElementById('confirmation-buttons').style.display = 'none';
 
-  // Build iframe URL with query parameters for prefill
-  const surveyUrl = `https://api.leadconnectorhq.com/widget/survey/hguGjV9kDYPzFtYLdtUI?booking_number=${encodeURIComponent(currentBookingNum)}&last_name=${encodeURIComponent(currentLastName)}`;
+  // Build iframe URL with cache-buster
+  const cacheBuster = Date.now();
+  const surveyUrl = `https://api.leadconnectorhq.com/widget/survey/hguGjV9kDYPzFtYLdtUI?booking_number=${encodeURIComponent(currentBookingNum)}&last_name=${encodeURIComponent(currentLastName)}&t=${cacheBuster}`;
 
   // Load iframe
   const iframe = document.createElement('iframe');
@@ -236,10 +237,10 @@ function handleDetailsCorrect() {
   document.getElementById('survey-iframe').appendChild(iframe);
   document.getElementById('survey-iframe').style.display = 'block';
 
-  // Load LeadConnector script only once
-  if (!document.querySelector('script[src="https://link.msgsndr.com/js/form_embed.js"]')) {
+  // Load LeadConnector script with cache-buster only once
+  if (!document.querySelector('script[src*="form_embed.js"]')) {
     const script = document.createElement('script');
-    script.src = 'https://link.msgsndr.com/js/form_embed.js';
+    script.src = `https://link.msgsndr.com/js/form_embed.js?t=${cacheBuster}`;
     document.head.appendChild(script);
   }
 }
