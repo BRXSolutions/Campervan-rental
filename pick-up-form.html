@@ -47,7 +47,7 @@ document.getElementById('verify-btn').onclick = async function(e) {
   document.getElementById('loading').style.display = 'block';
 
   try {
-    const response = await fetch('https://cloud.activepieces.com/api/v1/webhooks/PWGPbbTKKaJUE470aVwLy/sync', {
+    const response = await fetch('https://cloud.activepieces.com/api/v1/webhooks/tCOOvcl51zUGXBu6w6CYD/sync', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({bookingNum: currentBookingNum, lastName: currentLastName})
@@ -218,7 +218,7 @@ function handleDetailsCorrect() {
   document.getElementById('confirmation-buttons').style.display = 'none';
 
   // Build iframe URL with query parameters for prefill
-  const surveyUrl = `https://api.leadconnectorhq.com/widget/survey/HRnCawqi4cNodd48rYv0?booking_number=${encodeURIComponent(currentBookingNum)}&last_name=${encodeURIComponent(currentLastName)}`;
+  const surveyUrl = `https://api.leadconnectorhq.com/widget/survey/tOmp3e1syHCMQBcyH6Za?booking_number=${encodeURIComponent(currentBookingNum)}&last_name=${encodeURIComponent(currentLastName)}`;
 
   // Load iframe
   const iframe = document.createElement('iframe');
@@ -228,7 +228,7 @@ function handleDetailsCorrect() {
   iframe.style.height = '600px';
   iframe.style.display = 'block';
   iframe.scrolling = 'no';
-  iframe.id = 'HRnCawqi4cNodd48rYv0';
+  iframe.id = 'tOmp3e1syHCMQBcyH6Za';
   iframe.title = 'survey';
 
   document.getElementById('survey-iframe').innerHTML = '';
