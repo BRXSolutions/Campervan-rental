@@ -11,6 +11,10 @@
       <label style="display:block;margin-bottom:5px;color:#000;">Booking Number</label>
       <input id="booking-input" type="text" placeholder="e.g. 4020" style="width:100%;padding:12px;border:2px solid #bdbdbd;background:#e0e0e0;color:#000;border-radius:8px;font-size:16px;font-family:'DM Sans',Arial,sans-serif;">
     </div>
+    <div style="margin-bottom:20px;">
+      <label style="display:block;margin-bottom:5px;color:#000;">Email Address</label>
+      <input id="email-input" type="email" placeholder="e.g. john@example.com" style="width:100%;padding:12px;border:2px solid #bdbdbd;background:#e0e0e0;color:#000;border-radius:8px;font-size:16px;font-family:'DM Sans',Arial,sans-serif;">
+    </div>
     <div style="margin-bottom:25px;">
       <label style="display:block;margin-bottom:5px;color:#000;">Last Name</label>
       <input id="lastname-input" type="text" placeholder="e.g. Lucero" style="width:100%;padding:12px;border:2px solid #bdbdbd;background:#e0e0e0;color:#000;border-radius:8px;font-size:16px;font-family:'DM Sans',Arial,sans-serif;">
@@ -30,15 +34,17 @@
 <script>
 let currentBookingNum = '';
 let currentLastName = '';
+let currentEmail = '';
 
 document.getElementById('verify-btn').onclick = async function(e) {
   e.preventDefault();
   
   currentBookingNum = document.getElementById('booking-input').value.trim();
+  currentEmail = document.getElementById('email-input').value.trim().toLowerCase();
   currentLastName = document.getElementById('lastname-input').value.trim().toLowerCase();
 
-  if (!currentBookingNum || !currentLastName) {
-    document.getElementById('error').innerHTML = 'Please enter both fields';
+  if (!currentBookingNum || !currentEmail || !currentLastName) {
+    document.getElementById('error').innerHTML = 'Please enter all three fields';
     document.getElementById('error').style.display = 'block';
     document.getElementById('form-section').style.display = 'block';
     return;
@@ -51,7 +57,7 @@ document.getElementById('verify-btn').onclick = async function(e) {
     const response = await fetch('https://cloud.activepieces.com/api/v1/webhooks/tCOOvcl51zUGXBu6w6CYD/sync', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({bookingNum: currentBookingNum, lastName: currentLastName})
+      body: JSON.stringify({bookingNum: currentBookingNum, email: currentEmail, lastName: currentLastName})
     });
 
     let result;
@@ -160,7 +166,6 @@ document.getElementById('verify-btn').onclick = async function(e) {
           html += `<div><strong>Vehicle Fleet Number:</strong> ${data.vehicleFleetNumber}</div>`;
         }
         html += `<div><strong>Vehicle Registration Number:</strong> N/A</div></div></div><div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>`;
-
       }
 
       html += `</div>`;
@@ -218,9 +223,9 @@ function handleDetailsCorrect() {
   document.getElementById('booking-details').style.display = 'none';
   document.getElementById('confirmation-buttons').style.display = 'none';
 
-  // Build iframe URL with cache-buster
+  // Build iframe URL with cache-buster - now includes email
   const cacheBuster = Date.now();
-  const surveyUrl = `https://api.leadconnectorhq.com/widget/survey/hguGjV9kDYPzFtYLdtUI?booking_number=${encodeURIComponent(currentBookingNum)}&last_name=${encodeURIComponent(currentLastName)}&t=${cacheBuster}`;
+  const surveyUrl = `https://api.leadconnectorhq.com/widget/survey/hguGjV9kDYPzFtYLdtUI?booking_number=${encodeURIComponent(currentBookingNum)}&email=${encodeURIComponent(currentEmail)}&last_name=${encodeURIComponent(currentLastName)}&t=${cacheBuster}`;
 
   // Load iframe
   const iframe = document.createElement('iframe');
@@ -254,6 +259,7 @@ function resetForm() {
   document.getElementById('loading').style.display = 'none';
   currentBookingNum = '';
   currentLastName = '';
+  currentEmail = '';
 }
 </script>
 
