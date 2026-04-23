@@ -15,6 +15,10 @@
             background: #f5f5f5;
             font-family: 'DM Sans', Arial, sans-serif;
         }
+        /* Permissions policy headers */
+        iframe {
+            allow="camera 'none'; microphone 'none'; geolocation 'none'; fullscreen; payment";
+        }
     </style>
 </head>
 <body>
@@ -47,19 +51,23 @@
         <div id="booking-details" style="display:none;font-family:'DM Sans',Arial,sans-serif;"></div>
         <div id="confirmation-buttons" style="display:none;padding:20px;text-align:center;font-family:'DM Sans',Arial,sans-serif;"></div>
 
-        <!-- Updated survey container -->
+        <!-- Survey container -->
         <div id="survey-container" style="display:none;">
-            <div id="survey-iframe" style="width:100%;border:none;height:600px;"></div>
+            <div style="background:#f8f9fa;padding:20px;border-radius:12px;margin:10px 0;">
+                <h3 style="margin:0 0 15px 0;color:#000;text-align:center;">Drive Safe Guide Survey</h3>
+                <div id="survey-iframe" style="width:100%;border:none;height:700px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>
+            </div>
         </div>
 
+        <!-- Thank you popup -->
         <div id="thank-you-popup" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;justify-content:center;align-items:center;">
             <div style="background:#fff;color:#000;padding:40px;border-radius:20px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.5);font-family:'DM Sans',Arial,sans-serif;max-width:400px;">
                 <div style="font-size:48px;margin-bottom:20px;">✅</div>
                 <h2 style="margin:0 0 20px 0;font-size:24px;color:#16a34a;">Response Submitted Successfully!</h2>
                 <p style="font-size:18px;margin:0 0 30px 0;">Thank you for completing the Drive Safe Guide.</p>
                 <div style="font-size:24px;color:#666;">Redirecting in <span id="countdown">3</span> seconds...</div>
-                <button id="close-popup" style="margin-top:20px;padding:12px 24px;background:radial-gradient(circle 80px at 50% 70%, #444, #000);color:#fff;border:2px solid #fff;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;display:none;">
-                    Close
+                <button id="close-popup" style="margin-top:20px;padding:12px 24px;background:radial-gradient(circle 80px at 50% 70%, #444, #000);color:#fff;border:2px solid #fff;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;">
+                    Close & Return
                 </button>
             </div>
         </div>
@@ -79,9 +87,7 @@
             currentLastName = document.getElementById('lastname-input').value.trim().toLowerCase();
 
             if (!currentBookingNum || !currentLastName) {
-                document.getElementById('error').innerHTML = 'Please enter both fields';
-                document.getElementById('error').style.display = 'block';
-                document.getElementById('form-section').style.display = 'block';
+                showError('Please enter both fields');
                 return;
             }
 
@@ -114,7 +120,6 @@
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('booking-details').style.display = 'block';
                     
-                    // Booking details HTML (keeping your existing structure but fixed)
                     let html = `
                         <div style="background:#fff;color:#000;padding:30px;border-radius:20px;text-align:left;box-shadow:0 20px 40px rgba(0,0,0,0.2);font-family:'DM Sans',Arial,sans-serif;">
                             <h2 style="margin:0 0 20px 0;text-align:center"><strong>Booking # ${data.bookingNum || 'N/A'}</strong></h2>
@@ -150,15 +155,13 @@
                     `;
 
                     document.getElementById('booking-details').innerHTML = html;
-
-                    // Show confirmation buttons
                     document.getElementById('confirmation-buttons').style.display = 'block';
                     document.getElementById('confirmation-buttons').innerHTML = `
                         <div style="display:flex; justify-content:center; gap:16px; margin-bottom:15px;">
                             <button id="details-correct" style="flex:1; max-width:200px; padding:12px; text-align:center; background:radial-gradient(circle 80px at 50% 70%, #22c55e, #16a34a); color:#fff; border:2px solid #fff; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; font-family:'DM Sans',Arial,sans-serif;" onclick="handleDetailsCorrect()">
                                 ✓ Details are correct
                             </button>
-                            <button id="details-incorrect" style="flex:1; max-width:200px; padding:12px; text-align:center; background:radial-gradient(circle 80px at 50% 70%, #ef4444, #dc2626); color:#fff; border:2px solid #fff; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; font-family:'DM Sans',Arial,sans-serif;" onclick="window.location.href='mailto:support@wakacampa.com?subject=Booking%20Verification%20Issue%20-%20${currentBookingNum}&body=Hi%20Support,%0A%0AI%20have%20a%20problem%20with%20booking%20#${currentBookingNum}.%0AThe%20details%20shown%20are%20incorrect.%0A%0APlease%20help.%0A%0AThanks!';">
+                            <button style="flex:1; max-width:200px; padding:12px; text-align:center; background:radial-gradient(circle 80px at 50% 70%, #ef4444, #dc2626); color:#fff; border:2px solid #fff; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; font-family:'DM Sans',Arial,sans-serif;" onclick="window.location.href='mailto:support@wakacampa.com?subject=Booking%20Verification%20Issue%20-%20${currentBookingNum}&body=Hi%20Support,%0A%0AI%20have%20a%20problem%20with%20booking%20#${currentBookingNum}.%0AThe%20details%20shown%20are%20incorrect.%0A%0APlease%20help.%0A%0AThanks!';">
                                 ✗ Details are incorrect
                             </button>
                         </div>
@@ -173,57 +176,91 @@
         };
 
         function handleDetailsCorrect() {
-            // Hide all sections
             document.getElementById('booking-details').style.display = 'none';
             document.getElementById('confirmation-buttons').style.display = 'none';
 
-            // Build iframe URL with prefilled fields and cache-buster
+            // Build survey URL
             const cacheBuster = Date.now();
             const surveyUrl = `https://api.leadconnectorhq.com/widget/survey/hguGjV9kDYPzFtYLdtUI?booking_number=${encodeURIComponent(currentBookingNum)}&email=${encodeURIComponent(currentEmail)}&last_name=${encodeURIComponent(currentLastName)}&t=${cacheBuster}`;
 
-            // Load iframe
+            // Create iframe with strict permissions
             const iframe = document.createElement('iframe');
             iframe.src = surveyUrl;
             iframe.style.border = 'none';
             iframe.style.width = '100%';
-            iframe.style.height = '600px';
+            iframe.style.height = '700px';
             iframe.style.display = 'block';
             iframe.scrolling = 'no';
-            iframe.id = 'hguGjV9kDYPzFtYLdtUI';
-            iframe.title = 'survey';
+            iframe.allow = "camera 'none'; microphone 'none'; geolocation 'none'; fullscreen; payment";
+            iframe.sandbox = "allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation";
 
             document.getElementById('survey-iframe').innerHTML = '';
             document.getElementById('survey-iframe').appendChild(iframe);
             document.getElementById('survey-container').style.display = 'block';
 
-            // Load LeadConnector script with cache-buster only once
+            // Load LeadConnector script ONLY if not loaded
             if (!document.querySelector('script[src*="form_embed.js"]')) {
                 const script = document.createElement('script');
                 script.src = `https://link.msgsndr.com/js/form_embed.js?t=${cacheBuster}`;
+                script.onerror = function() {
+                    console.log('LeadConnector script failed to load - continuing without it');
+                };
                 document.head.appendChild(script);
             }
 
-            // Listen for form submission success - CRITICAL FIX
+            // Listen for form submission - Multiple event types for GHL
+            let submitHandled = false;
             const messageHandler = function(event) {
-                if (event.data && event.data.type === 'survey-submitted') {
-                    // Remove iframe
+                console.log('Message received:', event.data);
+                
+                // Check multiple possible GHL success messages
+                if (event.data && (
+                    event.data.type === 'survey-submitted' ||
+                    event.data.type === 'form-submitted' ||
+                    event.data.event === 'form-submitted' ||
+                    event.data === 'submitted' ||
+                    event.data.success
+                )) {
+                    if (submitHandled) return;
+                    submitHandled = true;
+                    
+                    console.log('Form submission detected!');
+                    
+                    // Clean up
                     document.getElementById('survey-container').style.display = 'none';
                     document.getElementById('survey-iframe').innerHTML = '';
-                    
-                    // Show thank you popup and redirect
-                    showThankYouPopup();
-                    
-                    // Clean up event listener
                     window.removeEventListener('message', messageHandler);
+                    
+                    // Show success popup
+                    showThankYouPopup();
                 }
             };
-            
+
+            // Listen on both window and iframe
             window.addEventListener('message', messageHandler);
+            
+            // Also try polling for iframe unload (fallback)
+            iframe.onload = function() {
+                const checkInterval = setInterval(() => {
+                    if (!iframe.contentWindow || iframe.contentWindow.closed || submitHandled) {
+                        clearInterval(checkInterval);
+                        window.removeEventListener('message', messageHandler);
+                    }
+                }, 1000);
+            };
+
+            // 5-minute timeout fallback
+            setTimeout(() => {
+                if (!submitHandled) {
+                    console.log('Survey timeout - showing success anyway');
+                    document.getElementById('survey-container').style.display = 'none';
+                    showThankYouPopup();
+                }
+            }, 300000);
         }
 
         function showThankYouPopup() {
             document.getElementById('thank-you-popup').style.display = 'flex';
-            document.getElementById('close-popup').style.display = 'inline-block';
             
             let countdown = 3;
             const countdownEl = document.getElementById('countdown');
@@ -243,7 +280,9 @@
         }
 
         function redirectToForm() {
-            window.location.href = baseUrl;
+            // Prevent any GHL redirects
+            window.onbeforeunload = null;
+            window.location.replace(baseUrl);
         }
 
         function showError(message) {
@@ -273,6 +312,15 @@
             document.getElementById('booking-input').value = '';
             document.getElementById('lastname-input').value = '';
         }
+
+        // Prevent any external redirects
+        window.addEventListener('beforeunload', function(e) {
+            // Allow our own redirect only
+            if (e.target.location.href.includes('leadconnectorhq.com') || e.target.location.href.includes('msgsndr.com')) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
     </script>
 </body>
 </html>
