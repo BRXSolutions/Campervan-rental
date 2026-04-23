@@ -216,7 +216,7 @@ document.getElementById('verify-btn').onclick = async function(e) {
 };
 
 function handleDetailsCorrect() {
-  // Hide booking details
+  // Hide all sections
   document.getElementById('booking-details').style.display = 'none';
   document.getElementById('confirmation-buttons').style.display = 'none';
 
@@ -231,10 +231,9 @@ function handleDetailsCorrect() {
   iframe.style.width = '100%';
   iframe.style.height = '600px';
   iframe.style.display = 'block';
+  iframe.scrolling = 'no';
   iframe.id = 'hguGjV9kDYPzFtYLdtUI';
   iframe.title = 'survey';
-  iframe.scrolling = 'no';
-  };
 
   document.getElementById('survey-iframe').innerHTML = '';
   document.getElementById('survey-iframe').appendChild(iframe);
@@ -246,6 +245,8 @@ function handleDetailsCorrect() {
     script.src = `https://link.msgsndr.com/js/form_embed.js?t=${cacheBuster}`;
     document.head.appendChild(script);
   }
+}
+
 
 function resetForm() {
   document.getElementById('form-section').style.display = 'block';
