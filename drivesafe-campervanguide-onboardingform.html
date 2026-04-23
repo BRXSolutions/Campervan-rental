@@ -234,13 +234,6 @@ function handleDetailsCorrect() {
   iframe.id = 'hguGjV9kDYPzFtYLdtUI';
   iframe.title = 'survey';
   iframe.scrolling = 'no';
-
-  // After the iframe is loaded, wait a bit then hide it and show thank you
-  iframe.onload = function () {
-    setTimeout(() => {
-      document.getElementById('survey-iframe').style.display = 'none';
-      showThankYouMessage();
-    }, 4000); // 4 seconds, adjust if needed
   };
 
   document.getElementById('survey-iframe').innerHTML = '';
@@ -253,24 +246,6 @@ function handleDetailsCorrect() {
     script.src = `https://link.msgsndr.com/js/form_embed.js?t=${cacheBuster}`;
     document.head.appendChild(script);
   }
-}
-
-function showThankYouMessage() {
-  // Hide everything except the thank-you message
-  document.getElementById('form-section').style.display = 'none';
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('booking-details').style.display = 'none';
-  document.getElementById('confirmation-buttons').style.display = 'none';
-  document.getElementById('survey-iframe').style.display = 'none';
-  document.getElementById('error').style.display = 'none';
-  document.getElementById('thank-you-message').style.display = 'block';
-  document.getElementById('thank-you-message').innerHTML = `
-    <div style="background:#fff;color:#000;padding:40px;border-radius:20px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.2);font-family:'DM Sans',Arial,sans-serif;">
-      <div style="font-size:48px;margin-bottom:20px;">✅</div>
-      <h2 style="margin:0 0 15px 0;font-size:24px;color:#16a34a;">Response Submitted!</h2>
-      <p style="font-size:16px;margin:0;">Response has been submitted. You may now close this page.</p>
-    </div>
-  `;
 }
 
 function resetForm() {
