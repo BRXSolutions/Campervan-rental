@@ -234,7 +234,39 @@ function handleDetailsCorrect() {
   iframe.scrolling = 'no';
   iframe.id = 'hguGjV9kDYPzFtYLdtUI';
   iframe.title = 'survey';
+  iframe.sandbox = 'allow-scripts allow-forms allow-same-origin allow-popups'; // Secure sandbox
   
+  // CRITICAL: Prevent iframe navigation and handle submission
+  iframe.onload = function() {
+    // Listen for GHL form submission OR timeout after 3 minutes
+    const submissionListener = function(event) {
+      // Handle GHL survey submitted message
+      if (event.data && event.data.type === 'survey-submitted') {
+        window.removeEventListener('message', submissionListener);
+        document.getElementById('survey-iframe').style.display = 'none';
+        showThankYouMessage();
+        return;
+      }
+      
+      // Handle any form submission events from GHL
+      if (event.origin === 'https://api.leadconnectorhq.com' && 
+          (event.data.type === 'form-submitted' || event.data.success)) {
+        window.removeEventListener('message', submissionListener);
+        document.getElementById('survey-iframe').style.display = 'none';
+        showThankYouMessage();
+      }
+    };
+    
+    window.addEventListener('message', submissionListener);
+    
+    // Fallback: Auto-complete after 3 minutes (180000ms)
+    setTimeout(() => {
+      window.removeEventListener('message', submissionListener);
+      document.getElementById('survey-iframe').style.display = 'none';
+      showThankYouMessage();
+    }, 180000);
+  };
+
   document.getElementById('survey-iframe').innerHTML = '';
   document.getElementById('survey-iframe').appendChild(iframe);
   document.getElementById('survey-iframe').style.display = 'block';
@@ -245,50 +277,6 @@ function handleDetailsCorrect() {
     script.src = `https://link.msgsndr.com/js/form_embed.js?t=${cacheBuster}`;
     document.head.appendChild(script);
   }
-
-  // FIXED: Multiple detection methods for GHL form completion
-  let submissionDetected = false;
-  
-  // 1. Original message listener
-  window.addEventListener('message', function(event) {
-    if (event.data && event.data.type === 'survey-submitted' && !submissionDetected) {
-      submissionDetected = true;
-      showThankYouMessage();
-    }
-  });
-
-  // 2. Poll for success page (WORKS WITH GHL)
-  let pollCount = 0;
-  const pollInterval = setInterval(() => {
-    pollCount++;
-    try {
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      const successElements = iframeDoc.querySelectorAll('[class*="success"], [class*="thank"], [class*="complete"], h1, h2');
-      
-      if (successElements.length > 0) {
-        const hasSuccessText = Array.from(successElements).some(el => 
-          el.textContent.toLowerCase().includes('thank') || 
-          el.textContent.toLowerCase().includes('success') ||
-          el.textContent.toLowerCase().includes('complete')
-        );
-        
-        if (hasSuccessText && !submissionDetected) {
-          submissionDetected = true;
-          clearInterval(pollInterval);
-          showThankYouMessage();
-        }
-      }
-      
-      // 2-minute safety timeout
-      if (pollCount > 120) {
-        clearInterval(pollInterval);
-        showThankYouMessage();
-      }
-      
-    } catch(e) {
-      // Cross-origin - continue polling
-    }
-  }, 2000);
 }
 
 function showThankYouMessage() {
@@ -299,24 +287,33 @@ function showThankYouMessage() {
       <div style="font-size:48px;margin-bottom:20px;">✅</div>
       <h2 style="margin:0 0 20px 0;font-size:24px;color:#16a34a;">Response Submitted Successfully!</h2>
       <p style="font-size:18px;margin:0 0 30px 0;">Thank you for completing the Drive Safe Guide.</p>
-      <div style="font-size:24px;color:#666;">This window will close in <span id="countdown">3</span> seconds...</div>
+      <div style="font-size:24px;color:#666;">Redirecting in <span id="countdown">5</span> seconds...</div>
+      <br>
+      <a href="https://brxsolutions.github.io/Campervan-rental/drivesafe-campervanguide-onboardingform.html" 
+         style="display:inline-block;margin-top:15px;padding:12px 24px;background:radial-gradient(circle 80px at 50% 70%, #22c55e, #16a34a);color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;font-size:16px;" 
+         id="redirect-btn">Go Back Now</a>
     </div>
   `;
   
-  // Countdown and auto-close
-  let countdown = 3;
+  // Countdown and redirect
+  let countdown = 5;
   const countdownEl = document.getElementById('countdown');
+  const redirectBtn = document.getElementById('redirect-btn');
+  
   const timer = setInterval(() => {
     countdown--;
     countdownEl.textContent = countdown;
     if (countdown <= 0) {
       clearInterval(timer);
-      window.close();
-      setTimeout(() => {
-        window.location.href = 'about:blank';
-      }, 500);
+      window.location.href = 'https://brxsolutions.github.io/Campervan-rental/drivesafe-campervanguide-onboardingform.html';
     }
   }, 1000);
+  
+  // Manual redirect on button click
+  redirectBtn.onclick = function(e) {
+    e.preventDefault();
+    window.location.href = 'https://brxsolutions.github.io/Campervan-rental/drivesafe-campervanguide-onboardingform.html';
+  };
 }
 
 function resetForm() {
