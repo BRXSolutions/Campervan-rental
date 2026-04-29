@@ -54,7 +54,7 @@ document.getElementById('login-btn').onclick = async function(e) {
     if (result.success && result.agentName) {
       localStorage.setItem('agentName', result.agentName);
       localStorage.setItem('isLoggedIn', 'true');
-      window.location.href = '#homepage';
+      window.location.href = 'https://brxsolutions.github.io/Campervan-rental/home-page.html';
     } else {
       showLoginError(result.message || 'Invalid username or password');
     }
