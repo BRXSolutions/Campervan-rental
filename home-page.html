@@ -10,125 +10,117 @@
   <div style="display:grid;grid-template-columns:minmax(200px,1fr) 7fr;gap:30px;height:calc(100vh - 200px);overflow:hidden;">
 
     <!-- LEFT MENU -->
-  <div style="display:grid;grid-template-columns:minmax(200px,1fr) 7fr;gap:30px;height:calc(100vh - 200px);overflow:hidden;">
+    <div style="min-width:200px;">
+      <h3 style="margin:0 0 20px 0;font-size:20px;text-align:center;">Quick Actions</h3>
+      <div style="display:grid;gap:15px;">
 
-  <!-- LEFT MENU -->
-  <div style="min-width:200px;">
-    <h3 style="margin:0 0 20px 0;font-size:20px;text-align:center;">Quick Actions</h3>
+        <a href="#home" onclick="showSection('home')" style="display:block;padding:20px;background:#f8f9fa;border:2px solid #e0e0e0;border-radius:12px;text-decoration:none;color:#000;font-size:16px;font-weight:500;text-align:center;">
+          🏠 Home
+        </a>
+
+        <a href="#booking" onclick="showSection('booking')" style="display:block;padding:20px;background:#f8f9fa;border:2px solid #e0e0e0;border-radius:12px;text-decoration:none;color:#000;font-size:16px;font-weight:500;text-align:center;">
+          🔍 Booking Lookup
+        </a>
+
+        <a href="#support" onclick="showSection('support')" style="display:block;padding:20px;background:#f8f9fa;border:2px solid #e0e0e0;border-radius:12px;text-decoration:none;color:#000;font-size:16px;font-weight:500;text-align:center;">
+          📋 Support Tickets
+        </a>
+
+      </div>
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div style="overflow-y:auto;height:calc(100vh - 200px);padding-right:10px;">
+
+      <!-- HOME -->
+<div id="home-section" style="display:block;">
+  <h3 style="text-align:center;margin:0 0 20px 0;font-size:22px;">Welcome to Your Dashboard</h3>
+
+  <!-- Hero Message -->
+  <div style="text-align:center;padding:30px;background:#f8f9fa;border-radius:16px;border:2px dashed #e0e0e0;margin-bottom:30px;">
+    <div style="font-size:24px;margin-bottom:15px;">🎉 Wakacampa Support Dashboard v.1 is now live!!</div>
+    <p style="color:#666;font-size:16px;margin:0;">Please feel free to send your suggestions to brix@wakacampa.com</p>
+  </div>
+
+  <!-- KNOWLEDGE BASE SECTION -->
+  <div style="max-width:600px;margin:0 auto;">
+    <h3 style="text-align:center;margin-bottom:20px;font-size:20px;">Knowledge Base</h3>
     <div style="display:grid;gap:15px;">
+      
+      <!-- Dropdown 1 -->
+      <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
+        <option value="">Operational Policies</option>
+        <option value="https://example.com/refund-policy">Refund Policy</option>
+        <option value="https://example.com/cancellation-policy">Cancellation Policy</option>
+      </select>
 
-      <a href="#home" onclick="showSection('home')" style="display:block;padding:20px;background:#f8f9fa;border:2px solid #e0e0e0;border-radius:12px;text-decoration:none;color:#000;font-size:16px;font-weight:500;text-align:center;">
-        🏠 Home
-      </a>
+      <!-- Dropdown 2 -->
+      <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
+        <option value="">Technical Guides</option>
+        <option value="https://example.com/api-docs">API Integration Docs</option>
+        <option value="https://example.com/automation-guide">Automation Workflow Guide</option>
+      </select>
 
-      <a href="#booking" onclick="showSection('booking')" style="display:block;padding:20px;background:#f8f9fa;border:2px solid #e0e0e0;border-radius:12px;text-decoration:none;color:#000;font-size:16px;font-weight:500;text-align:center;">
-        🔍 Booking Lookup
-      </a>
-
-      <a href="#support" onclick="showSection('support')" style="display:block;padding:20px;background:#f8f9fa;border:2px solid #e0e0e0;border-radius:12px;text-decoration:none;color:#000;font-size:16px;font-weight:500;text-align:center;">
-        📋 Support Tickets
-      </a>
+      <!-- Dropdown 3 -->
+      <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
+        <option value="">Communication Scripts</option>
+        <option value="https://example.com/email-templates">Email Templates</option>
+        <option value="https://example.com/chat-scripts">Chat Agent Scripts</option>
+      </select>
 
     </div>
   </div>
+</div>
 
-  <!-- RIGHT CONTENT -->
-  <div style="overflow-y:auto;height:calc(100vh - 200px);padding-right:10px;">
+      <!-- BOOKING LOOKUP -->
+      <div id="booking-section" style="display:none;">
 
-    <!-- HOME SECTION -->
-    <div id="home-section" style="display:block;">
-      <!--Hero Message -->
-      <div style="text-align:center;padding:30px;background:#f8f9fa;border-radius:16px;border:2px dashed #e0e0e0;margin-bottom:30px;">
-        <div style="font-size:24px;margin-bottom:15px;">🎉 Wakacampa Support Dashboard v.1 is now live!!</div>
-        <p style="color:#666;font-size:16px;margin:0;">Please feel free to send your suggestions to brix@wakacampa.com</p>
-      </div>
+        <div style="max-width:700px;margin:0 auto;padding:30px;background:#fff;color:#000;border-radius:16px;">
 
-      <!-- KNOWLEDGE BASE SECTION -->
-      <div style="max-width:100%;margin:0 auto;">
-        <h3 style="text-align:left;margin-bottom:20px;font-size:20px;">Knowledge Base</h3>
-        <div style="display:grid;gap:15px;">
-
-          <!-- Dropdown 1 -->
-          <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
-            <option value="">Operational Policies</option>
-            <option value="https://example.com/refund-policy">Refund Policy</option>
-            <option value="https://example.com/cancellation-policy">Cancellation Policy</option>
-          </select>
-
-          <!-- Dropdown 2 -->
-          <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
-            <option value="">Technical Guides</option>
-            <option value="https://example.com/api-docs">API Integration Docs</option>
-            <option value="https://example.com/automation-guide">Automation Workflow Guide</option>
-          </select>
-
-          <!-- Dropdown 3 -->
-          <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
-            <option value="">Communication Scripts</option>
-            <option value="https://example.com/email-templates">Email Templates</option>
-            <option value="https://example.com/chat-scripts">Chat Agent Scripts</option>
-          </select>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- BOOKING LOOKUP SECTION (inside layout) -->
-    <div id="booking-section" style="display:none;">
-      <div style="max-width:700px;margin:0 auto;padding:30px;background:#fff;color:#000;border-radius:16px;">
-
-        <div style="text-align:center;margin-bottom:30px;">
-          <h2 style="margin:0 0 10px 0;font-size:24px;"><strong>Waka Campa Support Lookup</strong></h2>
-          <p style="margin:0;font-size:16px;">Enter booking details to view opportunity information</p>
-        </div>
-
-        <div id="form-section-support">
-          <div style="margin-bottom:20px;">
-            <label style="display:block;margin-bottom:5px;font-weight:bold;">Booking Number</label>
-            <input id="booking-input-support" type="text" placeholder="e.g. 4020" style="width:100%;padding:12px;border:2px solid #bdbdbd;background:#e0e0e0;border-radius:8px;font-size:16px;">
+          <div style="text-align:center;margin-bottom:30px;">
+            <h2 style="margin:0 0 10px 0;font-size:24px;"><strong>Waka Campa Support Lookup</strong></h2>
+            <p style="margin:0;font-size:16px;">Enter booking details to view opportunity information</p>
           </div>
 
-          <div style="margin-bottom:25px;">
-            <label style="display:block;margin-bottom:5px;font-weight:bold;">Last Name</label>
-            <input id="lastname-input-support" type="text" placeholder="e.g. Lucero" style="width:100%;padding:12px;border:2px solid #bdbdbd;background:#e0e0e0;border-radius:8px;font-size:16px;">
+          <div id="form-section-support">
+            <div style="margin-bottom:20px;">
+              <label style="display:block;margin-bottom:5px;font-weight:bold;">Booking Number</label>
+              <input id="booking-input-support" type="text" placeholder="e.g. 4020" style="width:100%;padding:12px;border:2px solid #bdbdbd;background:#e0e0e0;border-radius:8px;font-size:16px;">
+            </div>
+
+            <div style="margin-bottom:25px;">
+              <label style="display:block;margin-bottom:5px;font-weight:bold;">Last Name</label>
+              <input id="lastname-input-support" type="text" placeholder="e.g. Lucero" style="width:100%;padding:12px;border:2px solid #bdbdbd;background:#e0e0e0;border-radius:8px;font-size:16px;">
+            </div>
+
+            <button id="verify-btn-support" type="button" style="width:100%;padding:15px;background:radial-gradient(circle 300px at 50% 70%, #444, #000);color:#fff;border:2px solid #fff;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer;">
+              Verify Booking
+            </button>
           </div>
 
-          <button id="verify-btn-support" type="button" style="width:100%;padding:15px;background:radial-gradient(circle 300px at 50% 70%, #444, #000);color:#fff;border:2px solid #fff;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer;">
-            Verify Booking
-          </button>
+          <div id="loading-support" style="display:none;padding:20px;text-align:center;">🔍 Searching Reservation....</div>
+          <div id="booking-details-support" style="display:none;"></div>
+          <div id="error-support" style="display:none;color:#ef4444;text-align:center;padding:20px;"></div>
+
         </div>
 
-        <div id="loading-support" style="display:none;padding:20px;text-align:center;">🔍 Searching Reservation....</div>
-        <div id="booking-details-support" style="display:none;"></div>
-        <div id="error-support" style="display:none;color:#ef4444;text-align:center;padding:20px;"></div>
       </div>
-    </div>
 
-    <!-- SUPPORT SECTION (inside layout) -->
-    <div id="support-section" style="display:none;">
-      <h3 style="text-align:center;margin:0 0 20px 0;font-size:22px;">Support Tickets</h3>
+      <!-- SUPPORT -->
+      <div id="support-section" style="display:none;">
+        <h3 style="text-align:center;margin:0 0 20px 0;font-size:22px;">Support Tickets</h3>
 
-      <div style="text-align:center;padding:30px;background:#f8f9fa;border-radius:16px;border:2px dashed #e0e0e0;">
-        <div style="font-size:24px;margin-bottom:15px;">📋 Coming soon...</div>
-        <p style="color:#666;font-size:16px;margin:0;">Support ticket management will be here.</p>
+        <div style="text-align:center;padding:30px;background:#f8f9fa;border-radius:16px;border:2px dashed #e0e0e0;">
+          <div style="font-size:24px;margin-bottom:15px;">📋 Coming soon...</div>
+          <p style="color:#666;font-size:16px;margin:0;">Support ticket management will be here.</p>
+        </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </div>
 
 <script>
-  /* SHOW AGENT NAME IN HEADER */
-window.addEventListener('load', function () {
-  const agentName = localStorage.getItem('agentName');
-
-  const welcomeEl = document.getElementById('agent-welcome');
-  if (!welcomeEl) return;
-
-  welcomeEl.innerHTML = agentName
-    ? `Welcome, <strong>${agentName}</strong>`
-    : 'Welcome, Agent';
-});
 function showSection(section) {
   document.getElementById('home-section').style.display = 'none';
   document.getElementById('booking-section').style.display = 'none';
@@ -328,11 +320,9 @@ function resetLookup(){
   document.getElementById('booking-input-support').value='';
   document.getElementById('lastname-input-support').value='';
 }
- const basePath = '/Campervan-rental';
-
-document.getElementById('logout-btn').onclick = function () {
+  document.getElementById('logout-btn').onclick = function () {
   sessionStorage.clear();
   localStorage.clear();
-  window.location.href = `${basePath}/login.html`;
+  window.location.href = 'https://brxsolutions.github.io/Campervan-rental/login.html';
 }
 </script>
