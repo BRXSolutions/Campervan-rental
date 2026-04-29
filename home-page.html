@@ -298,9 +298,9 @@ document.getElementById('booking-details-support').innerHTML = `
 
 </div>
 `;
-
+      
       document.getElementById('booking-details-support').style.display = 'block';
-
+      
     } else {
       document.getElementById('error-support').innerHTML = '❌ Booking not found';
       document.getElementById('error-support').style.display = 'block';
@@ -319,5 +319,10 @@ function resetLookup(){
   document.getElementById('error-support').style.display='none';
   document.getElementById('booking-input-support').value='';
   document.getElementById('lastname-input-support').value='';
+}
+  document.getElementById('logout-btn').onclick = function () {
+  sessionStorage.clear();
+  localStorage.clear();
+  window.location.href = '/login.html';
 }
 </script>
