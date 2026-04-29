@@ -152,56 +152,122 @@ document.getElementById('verify-btn-support').onclick = async function(e) {
         ? ghlBaseUrl + data.opportunityId + '?tab=Opportunity+Details'
         : '';
 
-      document.getElementById('booking-details-support').innerHTML = `
-      <div style="background:#fff;padding:25px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.08);">
+      <!-- REPLACE ONLY YOUR booking-details-support.innerHTML = `...`; BLOCK WITH THIS -->
 
-        <h2 style="text-align:center;margin-top:0;">Booking # ${data.bookingNum || 'N/A'}</h2>
-        <hr>
+document.getElementById('booking-details-support').innerHTML = `
+<div style="background:#fff;color:#000;padding:30px;border-radius:20px;text-align:left;box-shadow:0 20px 40px rgba(0,0,0,0.12);font-family:'DM Sans',Arial,sans-serif;">
 
-        <h3>Booking Details</h3>
-        <p><strong>Status:</strong> ${data.reservationStatus || '—'}</p>
-        <p><strong>Pipeline Stage:</strong> ${pipelineStageName}</p>
-        <p><strong>Booking Date:</strong> ${data.bookingDate || '—'}</p>
-        <p><strong>Pickup:</strong> ${data.pickupDate || '—'} ${data.pickupTime || ''}</p>
-        <p><strong>Pickup Location:</strong> ${data.pickupLocation || '—'}</p>
-        <p><strong>Dropoff:</strong> ${data.dropoffDate || '—'} ${data.dropoffTime || ''}</p>
-        <p><strong>Dropoff Location:</strong> ${data.dropoffLocation || '—'}</p>
-        <p><strong>Total Cost:</strong> ${data.totalCost || '—'}</p>
-        <p><strong>Balance Due:</strong> ${data.totalBalanceDue || '—'}</p>
+  <h2 style="margin:0 0 20px 0;text-align:center;"><strong>Booking # ${data.bookingNum || 'N/A'}</strong></h2>
+  <div style="border-bottom:1px solid #ddd;margin:0 0 20px 0;"></div>
 
-        <hr>
+  <!-- 1. BOOKING DETAILS -->
+  <div style="margin-bottom:20px;">
+    <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:center;"><strong>Booking Details</strong></h4>
 
-        <h3>Contact Details</h3>
-        <p><strong>Name:</strong> ${data.hirerFullName || '—'}</p>
-        <p><strong>Email:</strong> ${data.hirerEmail || '—'}</p>
-        <p><strong>Phone:</strong> ${data.hirerPhone || '—'}</p>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+      <div><strong>Status:</strong> ${data.reservationStatus || '—'}</div>
+      <div><strong>Pipeline Stage:</strong> ${pipelineStageName}</div>
+      <div><strong>Booking Date:</strong> ${data.bookingDate || '—'}</div>
+      <div><strong>Number of Days:</strong> ${data.numberOfDays || '—'}</div>
+      <div><strong>Pickup Date:</strong> ${data.pickupDate || '—'}</div>
+      <div><strong>Pickup Time:</strong> ${data.pickupTime || '—'}</div>
+      <div><strong>Pickup Location:</strong> ${data.pickupLocation || '—'}</div>
+      <div><strong>Dropoff Date:</strong> ${data.dropoffDate || '—'}</div>
+      <div><strong>Dropoff Time:</strong> ${data.dropoffTime || '—'}</div>
+      <div><strong>Dropoff Location:</strong> ${data.dropoffLocation || '—'}</div>
+      <div><strong>Total Cost:</strong> ${data.totalCost || '—'}</div>
+      <div><strong>Total Amount:</strong> ${data.totalAmount || '—'}</div>
+      <div><strong>Balance Due:</strong> ${data.totalBalanceDue || '—'}</div>
+      <div><strong>Source:</strong> ${data.source || '—'}</div>
+      <div><strong>Reference:</strong> ${data.reservationRef || '—'}</div>
+      <div><strong>Where did you know about us:</strong> ${data.whereDidYouKnow || '—'}</div>
+    </div>
+  </div>
 
-        <hr>
+  <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
 
-        <h3>Driver Details</h3>
-        <p><strong>Name:</strong> ${data.driverName || '—'}</p>
-        <p><strong>License:</strong> ${data.driverLicenseNumber || '—'}</p>
+  <!-- 2. CONTACT DETAILS -->
+  <div style="margin-bottom:20px;">
+    <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:center;"><strong>Contact Details</strong></h4>
 
-        <hr>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+      <div><strong>Hirer Full Name:</strong> ${data.hirerFullName || '—'}</div>
+      <div><strong>Email:</strong> ${data.hirerEmail || '—'}</div>
+      <div><strong>Phone:</strong> ${data.hirerPhone || '—'}</div>
+      <div><strong>Additional Phone:</strong> ${data.additionalPhone || '—'}</div>
+    </div>
+  </div>
 
-        <h3>Vehicle Details</h3>
-        <p><strong>Type:</strong> ${data.vehicleCategory || '—'}</p>
-        <p><strong>Fleet Number:</strong> ${data.vehicleFleetNumber || '—'}</p>
-        <p><strong>Registration:</strong> ${data.vehicleRegistrationNumber || '—'}</p>
+  <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
 
-        <hr>
+  <!-- 3. DRIVER'S INFORMATION -->
+  <div style="margin-bottom:20px;">
+    <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:center;"><strong>Driver's Information</strong></h4>
 
-        <h3>Links</h3>
-        <p>${data.RCMDetailLink ? '<a href="'+data.RCMDetailLink+'" target="_blank">View RCM Booking</a>' : '—'}</p>
-        <p>${ghlOpportunityLink ? '<a href="'+ghlOpportunityLink+'" target="_blank">View GHL Opportunity</a>' : '—'}</p>
-        <p>${data.agreementPage ? '<a href="'+data.agreementPage+'" target="_blank">View Agreement</a>' : '—'}</p>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+      <div><strong>Driver's Full Name:</strong> ${data.driverName || '—'}</div>
+      <div><strong>Driver's License Number:</strong> ${data.driverLicenseNumber || '—'}</div>
+    </div>
+  </div>
 
-        <button onclick="resetLookup()" style="margin-top:20px;width:100%;padding:12px;background:radial-gradient(circle 80px at 50% 70%, #444, #000);color:#fff;border:2px solid #fff;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
-          Check Another Booking
-        </button>
+  <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
 
-      </div>
-      `;
+  <!-- 4. VEHICLE DETAILS -->
+  <div style="margin-bottom:15px;">
+    <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:center;"><strong>Vehicle Details</strong></h4>
+
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+      <div><strong>Vehicle Type:</strong> ${data.vehicleCategory || '—'}</div>
+      <div><strong>Vehicle Fleet Number:</strong> ${data.vehicleFleetNumber || '—'}</div>
+      <div><strong>Vehicle Registration Number:</strong> ${data.vehicleRegistrationNumber || '—'}</div>
+    </div>
+  </div>
+
+  <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+
+  <!-- 5. GHL OPPORTUNITY METADATA -->
+  <div style="margin-bottom:15px;">
+    <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:center;"><strong>GHL Opportunity Metadata</strong></h4>
+
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+      <div><strong>Opportunity ID:</strong> ${data.opportunityId || '—'}</div>
+      <div><strong>Contact ID:</strong> ${data.contactId || '—'}</div>
+      <div><strong>Status:</strong> ${data.status || '—'}</div>
+      <div><strong>Notes:</strong> ${data.notes || '—'}</div>
+      <div><strong>Assigned To:</strong> ${data.assignedTo || '—'}</div>
+      <div><strong>Effective Probability:</strong> ${data.effectiveProbability || '—'}</div>
+      <div><strong>Created:</strong> ${data.createdAt ? new Date(data.createdAt).toLocaleDateString() : '—'}</div>
+      <div><strong>Updated:</strong> ${data.updatedAt ? new Date(data.updatedAt).toLocaleDateString() : '—'}</div>
+      <div><strong>Last Status Change:</strong> ${data.lastStatusChangeAt ? new Date(data.lastStatusChangeAt).toLocaleDateString() : '—'}</div>
+      <div><strong>Last Stage Change:</strong> ${data.lastStageChangeAt ? new Date(data.lastStageChangeAt).toLocaleDateString() : '—'}</div>
+    </div>
+  </div>
+
+  <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+
+  <!-- 6. ADDITIONAL INFO -->
+  <div style="margin-bottom:15px;">
+    <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:center;"><strong>Additional Info</strong></h4>
+
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+      <div><strong>RCM Booking Link:</strong> ${data.RCMDetailLink ? `<a href="${data.RCMDetailLink}" target="_blank">View RCM Booking</a>` : '—'}</div>
+      <div><strong>GHL Opportunity Link:</strong> ${ghlOpportunityLink ? `<a href="${ghlOpportunityLink}" target="_blank">View GHL Opportunity</a>` : '—'}</div>
+      <div><strong>Agreement Page:</strong> ${data.agreementPage ? `<a href="${data.agreementPage}" target="_blank">View Agreement</a>` : '—'}</div>
+    </div>
+  </div>
+
+  <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+
+  <p style="margin:10px 0 0 0;color:#000;font-size:16px;">
+    <i>*This view is for support only. Use with care.</i>
+  </p>
+
+  <button onclick="resetLookup()" style="margin-top:15px;width:100%;padding:12px;background:radial-gradient(circle 80px at 50% 70%, #444, #000);color:#fff;border:2px solid #fff;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
+    Check Another Booking
+  </button>
+
+</div>
+`;
 
       document.getElementById('booking-details-support').style.display = 'block';
 
