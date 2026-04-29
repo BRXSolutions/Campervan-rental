@@ -7,7 +7,13 @@
     <button id="logout-btn" style="margin-top:15px;padding:10px 25px;background:radial-gradient(circle 80px at 50% 70%, #444, #000);color:#fff;border:2px solid #fff;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;font-family:'DM Sans',Arial,sans-serif;">Logout</button>
   </div>
 
-  <div style="display:grid;grid-template-columns:minmax(200px,1fr) 7fr;gap:30px;height:calc(100vh - 200px);overflow:hidden;">
+  <div style="
+    display:grid;
+    grid-template-columns:200px 3px 7fr;
+    gap:0;
+    height:calc(100vh - 200px);
+    overflow:hidden;
+  ">
 
     <!-- LEFT MENU -->
     <div style="min-width:200px;">
@@ -29,46 +35,49 @@
       </div>
     </div>
 
+    <!-- VERTICAL LINE SEPARATOR -->
+    <div style="background:#e0e0e0;"></div>
+
     <!-- RIGHT CONTENT -->
     <div style="overflow-y:auto;height:calc(100vh - 200px);padding-right:10px;">
 
       <!-- HOME -->
-<div id="home-section" style="display:block;">
-  <!-- Hero Message -->
-  <div style="text-align:center;padding:30px;background:#f8f9fa;border-radius:16px;border:2px dashed #e0e0e0;margin-bottom:30px;">
-    <div style="font-size:24px;margin-bottom:15px;">🎉 Wakacampa Support Dashboard v.1 is now live!!</div>
-    <p style="color:#666;font-size:16px;margin:0;">Please feel free to send your suggestions to brix@wakacampa.com</p>
-  </div>
+      <div id="home-section" style="display:block;">
+        <!-- Hero Message -->
+        <div style="text-align:center;padding:30px;background:#f8f9fa;border-radius:16px;border:2px dashed #e0e0e0;margin-bottom:30px;">
+          <div style="font-size:24px;margin-bottom:15px;">🎉 Wakacampa Support Dashboard v.1 is now live!!</div>
+          <p style="color:#666;font-size:16px;margin:0;">Please feel free to send your suggestions to brix@wakacampa.com</p>
+        </div>
 
-  <!-- KNOWLEDGE BASE SECTION -->
-  <div style="max-width:100%;margin:0 auto;">
-    <h3 style="text-align:left;margin-bottom:20px;font-size:20px;">Knowledge Base</h3>
-    <div style="display:grid;gap:15px;">
-      
-      <!-- Dropdown 1 -->
-      <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
-        <option value="">Operational Policies</option>
-        <option value="https://example.com/refund-policy">Refund Policy</option>
-        <option value="https://example.com/cancellation-policy">Cancellation Policy</option>
-      </select>
+        <!-- KNOWLEDGE BASE SECTION -->
+        <div style="max-width:100%;margin:0 auto;">
+          <h3 style="text-align:left;margin-bottom:20px;font-size:20px;">Knowledge Base</h3>
+          <div style="display:grid;gap:15px;">
+            
+            <!-- Dropdown 1 -->
+            <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
+              <option value="">Operational Policies</option>
+              <option value="https://example.com/refund-policy">Refund Policy</option>
+              <option value="https://example.com/cancellation-policy">Cancellation Policy</option>
+            </select>
 
-      <!-- Dropdown 2 -->
-      <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
-        <option value="">Technical Guides</option>
-        <option value="https://example.com/api-docs">API Integration Docs</option>
-        <option value="https://example.com/automation-guide">Automation Workflow Guide</option>
-      </select>
+            <!-- Dropdown 2 -->
+            <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
+              <option value="">Technical Guides</option>
+              <option value="https://example.com/api-docs">API Integration Docs</option>
+              <option value="https://example.com/automation-guide">Automation Workflow Guide</option>
+            </select>
 
-      <!-- Dropdown 3 -->
-      <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
-        <option value="">Communication Scripts</option>
-        <option value="https://example.com/email-templates">Email Templates</option>
-        <option value="https://example.com/chat-scripts">Chat Agent Scripts</option>
-      </select>
+            <!-- Dropdown 3 -->
+            <select style="width:100%;padding:15px;background:#fff;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;cursor:pointer;" onchange="if(this.value) window.open(this.value, '_blank');">
+              <option value="">Communication Scripts</option>
+              <option value="https://example.com/email-templates">Email Templates</option>
+              <option value="https://example.com/chat-scripts">Chat Agent Scripts</option>
+            </select>
 
-    </div>
-  </div>
-</div>
+          </div>
+        </div>
+      </div>
 
       <!-- BOOKING LOOKUP -->
       <div id="booking-section" style="display:none;">
