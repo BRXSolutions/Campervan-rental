@@ -121,6 +121,17 @@
 </div>
 
 <script>
+  /* SHOW AGENT NAME IN HEADER */
+window.addEventListener('load', function () {
+  const agentName = localStorage.getItem('agentName');
+
+  const welcomeEl = document.getElementById('agent-welcome');
+  if (!welcomeEl) return;
+
+  welcomeEl.innerHTML = agentName
+    ? `Welcome, <strong>${agentName}</strong>`
+    : 'Welcome, Agent';
+});
 function showSection(section) {
   document.getElementById('home-section').style.display = 'none';
   document.getElementById('booking-section').style.display = 'none';
