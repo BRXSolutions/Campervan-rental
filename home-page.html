@@ -9,14 +9,15 @@
 
   <div style="
     display:grid;
-    grid-template-columns:200px 3px 7fr;
+    grid-template-columns:200px 3px 1fr;
     gap:0;
     height:calc(100vh - 200px);
     overflow:hidden;
+    padding:0 15px;
   ">
 
     <!-- LEFT MENU -->
-    <div style="min-width:200px;">
+    <div style="min-width:200px;padding-top:10px;">
       <h3 style="margin:0 0 20px 0;font-size:20px;text-align:center;">Quick Actions</h3>
       <div style="display:grid;gap:15px;">
 
@@ -36,10 +37,10 @@
     </div>
 
     <!-- VERTICAL LINE SEPARATOR -->
-    <div style="background:#e0e0e0;"></div>
+    <div style="background:#e0e0e0;align-self:start;margin-top:10px;border-radius:3px;"></div>
 
     <!-- RIGHT CONTENT -->
-    <div style="overflow-y:auto;height:calc(100vh - 200px);padding-right:10px;">
+    <div style="overflow-y:auto;height:calc(100vh - 200px);padding:10px 0 0 20px;">
 
       <!-- HOME -->
       <div id="home-section" style="display:block;">
@@ -126,7 +127,6 @@
     </div>
   </div>
 </div>
-
 <script>
   /* SHOW AGENT NAME IN HEADER */
 window.addEventListener('load', function () {
