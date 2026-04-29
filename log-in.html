@@ -38,7 +38,6 @@ document.getElementById('login-btn').onclick = async function(e) {
   document.getElementById('loading-login').style.display = 'block';
 
   try {
-    // REPLACE WITH YOUR ACTIVEPIECES WEBHOOK URL THAT CHECKS GOOGLE SHEETS
     const response = await fetch('https://cloud.activepieces.com/api/v1/webhooks/jpv8080Nl1E8ooQ5YY2gc/sync', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -53,10 +52,9 @@ document.getElementById('login-btn').onclick = async function(e) {
     }
 
     if (result.success && result.agentName) {
-      // SUCCESS: Store agent info and redirect to homepage
       localStorage.setItem('agentName', result.agentName);
       localStorage.setItem('isLoggedIn', 'true');
-      window.location.href = '#homepage'; // Or your homepage URL
+      window.location.href = '#homepage';
     } else {
       showLoginError(result.message || 'Invalid username or password');
     }
@@ -78,7 +76,6 @@ function showLoginError(message) {
   `;
 }
 
-// Check if already logged in on page load
 if (localStorage.getItem('isLoggedIn') === 'true') {
   window.location.href = '#homepage';
 }
@@ -93,6 +90,6 @@ body, html {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff; /* WHITE BACKGROUND */
 }
 </style>
