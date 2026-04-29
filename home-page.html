@@ -320,9 +320,11 @@ function resetLookup(){
   document.getElementById('booking-input-support').value='';
   document.getElementById('lastname-input-support').value='';
 }
-  document.getElementById('logout-btn').onclick = function () {
+ const basePath = '/campervan-rental';
+
+document.getElementById('logout-btn').onclick = function () {
   sessionStorage.clear();
   localStorage.clear();
-  window.location.href = 'https://brxsolutions.github.io/Campervan-rental/login.html';
+  window.location.href = `${basePath}/login.html`;
 }
 </script>
