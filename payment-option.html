@@ -135,35 +135,86 @@ document.getElementById('verify-btn').onclick = async function(e){
       document.getElementById('booking-details').style.display='block';
 
       /* KEEPING ALL DETAILS UNTOUCHED */
-   let html = `
-  <div style="background:#fff;color:#000;padding:30px;border-radius:20px;text-align:left;box-shadow:0 20px 40px rgba(0,0,0,0.2);">
-    <h2 style="margin:0 0 20px 0;text-align:center"><strong>Booking # ${data.bookingNum || 'N/A'}</strong></h2>
-    <div style="border-bottom:1px solid #ddd;margin:0 0 20px 0;"></div>
+let html = `
+        <div style="background:#fff;color:#000;padding:30px;border-radius:20px;text-align:left;box-shadow:0 20px 40px rgba(0,0,0,0.2);font-family:'DM Sans',Arial,sans-serif;">
+          <h2 style="margin:0 0 20px 0;text-align:center"><strong>Booking # ${data.bookingNum || 'N/A'}</strong></h2>
+          <div style="border-bottom:1px solid #ddd;margin:0 0 20px 0;"></div>
+          
+          <div style="margin-bottom:20px;">
+            <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:left"><strong><u>Booking Details</u></strong></h4>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+               <div><strong>Pickup Date:</strong> ${formatDate(data.pickupDate)}</div>
+               <div><strong>Pickup Time:</strong> ${data.pickupTime || 'N/A'}</div>
+               <div><strong>Pickup Location:</strong> ${data.pickupLocation || 'N/A'}</div>
+               <div><strong>Dropoff Date:</strong> ${formatDate(data.dropoffDate)}</div>
+               <div><strong>Dropoff Time:</strong> ${data.dropoffTime || 'N/A'}</div>
+               <div><strong>Dropoff Location:</strong> ${data.dropoffLocation || 'N/A'}</div>
+               <div><strong>Total Cost:</strong> NZD ${formatCurrency(data.totalCost)}</div>
+               <div><strong>Balance Due:</strong> NZD ${formatCurrency(data.totalBalanceDue)}</div>
+            </div>
+          </div>
+          <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+          
+          <div style="margin-bottom:20px;">
+            <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:left"><strong><u>Contact Details</u></strong></h4>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+              <div><strong>Hirer Full Name:</strong> ${data.hirerFullName || 'N/A'}</div>
+              <div><strong>Email:</strong> ${data.hirerEmail || data.email || 'N/A'}</div>
+              <div><strong>Phone:</strong> ${data.hirerPhone || 'N/A'}</div>
+            `;
 
-    <div style="margin-bottom:20px;">
-      <h4><strong><u>Booking Details</u></strong></h4>
-      <div><strong>Pickup Date:</strong> ${formatDate(data.pickupDate)}</div>
-      <div><strong>Pickup Time:</strong> ${data.pickupTime || 'N/A'}</div>
-      <div><strong>Pickup Location:</strong> ${data.pickupLocation || 'N/A'}</div>
-      <div><strong>Dropoff Date:</strong> ${formatDate(data.dropoffDate)}</div>
-      <div><strong>Dropoff Time:</strong> ${data.dropoffTime || 'N/A'}</div>
-      <div><strong>Dropoff Location:</strong> ${data.dropoffLocation || 'N/A'}</div>
-      <div><strong>Total Cost:</strong> NZD ${formatCurrency(data.totalCost)}</div>
-      <div><strong>Balance Due:</strong> NZD ${formatCurrency(data.totalBalanceDue)}</div>
-    </div>
+      if (data.additionalPhone) {
+        html += `<div><strong>Additional Phone:</strong> ${data.additionalPhone}</div>`;
+      }
 
-    <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+      html += `
+            </div>
+          </div>
+          <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+      `;
 
-    <div style="margin-bottom:20px;">
-      <h4><strong><u>Contact Details</u></strong></h4>
-      <div><strong>Hirer Full Name:</strong> ${data.hirerFullName || 'N/A'}</div>
-      <div><strong>Email:</strong> ${data.hirerEmail || data.email || 'N/A'}</div>
-      <div><strong>Phone:</strong> ${data.hirerPhone || 'N/A'}</div>
-    </div>
-  </div>
-`;
+      const hasDriverInfo = data.driverName || data.driverLicenseNumber;
+      if (hasDriverInfo) {
+        html += `
+          <div style="margin-bottom:20px;">
+            <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:left"><strong><u>Driver's Information</u></strong></h4>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+        `;
 
-document.getElementById('booking-details').innerHTML = html;
+        if (data.driverName) {
+          html += `<div><strong>Driver's Full Name:</strong> ${data.driverName}</div>`;
+        }
+        if (data.driverLicenseNumber) {
+          html += `<div><strong>Driver's License Number:</strong> ${data.driverLicenseNumber}</div>`;
+        }
+
+        html += `
+            </div>
+          </div>
+          <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+        `;
+      }
+
+      const hasVehicleInfo = data.vehicleCategory || data.vehicleFleetNumber;
+      if (hasVehicleInfo) {
+        html += `
+          <div style="margin-bottom:15px;">
+            <h4 style="margin:0 0 10px 0;font-size:18px;color:#000;text-align:left"><strong><u>Vehicle Details</u></strong></h4>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:16px;text-align:left;">
+        `;
+
+        if (data.vehicleCategory) {
+          html += `<div><strong>Vehicle Type:</strong> ${data.vehicleCategory}</div>`;
+        }
+        if (data.vehicleFleetNumber) {
+          html += `<div><strong>Vehicle Fleet Number:</strong> ${data.vehicleFleetNumber}</div>`;
+        }
+        html += `<div><strong>Vehicle Registration Number:</strong> N/A</div></div></div><div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>`;
+      }
+
+      html += `</div>`;
+
+      document.getElementById('booking-details').innerHTML = html;
 
       /* PAYMENT BUTTONS */
       document.getElementById('payment-buttons').style.display='block';
