@@ -163,17 +163,23 @@ document.getElementById('verify-btn').onclick = async function(e){
   }
 };
 
-function payCard(){
-  /* SEND TO SLACK WEBHOOK */
-  fetch('YOUR_SLACK_WEBHOOK_URL',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      text:`💳 Card Payment Requested\nBooking: ${currentBookingNum}\nLast Name: ${currentLastName}`
+function payCard() {
+  /* Notify your internal team (e.g., Slack, ActivePieces webhook, etc) */
+  fetch('YOUR_SLACK_WEBHOOK_URL', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      text: `💳 Card Payment Requested\nBooking: ${currentBookingNum}\nLast Name: ${currentLastName}`
     })
-  });
+  }).catch(err => console.error(err));
 
-  alert('Payment team has been notified.');
+  // Same message + close popup behavior
+  document.getElementById('receipt-msg').innerHTML =
+    "A team member will reach out to you for the credit card vault please check your email from our support.<br>Window will close in 3 sec.";
+
+  setTimeout(() => {
+    closeBankPopup();
+  }, 3000);
 }
 
 function openBankPopup(){
@@ -184,12 +190,59 @@ function closeBankPopup(){
   document.getElementById('bank-popup').style.display='none';
 }
 
-function submitReceipt(){
+function submitReceipt() {
   const file = document.getElementById('receipt-file').files[0];
 
-  if(!file){
-    document.getElementById('receipt-msg').innerHTML='Please upload receipt.';
+  if (!file) {
+    document.getElementById('receipt-msg').innerHTML = 'Please upload receipt.';
     return;
+  }
+
+  // Show uploading message
+  document.getElementById('receipt-msg').innerHTML = 'Uploading...';
+
+  const formData = new FormData();
+  const customFieldId = "EkeYHbpGrbVT5HeqDphe";
+  const fileId = "1";  // simple ID; you can use UUID if you want
+
+  formData.append(customFieldId + "_" + fileId, file);
+
+  // These must be injected from your page or via server-side; example:
+  const GHL_API_KEY = "pit-ee50c887-1570-4855-bf8e-5bdc4fb396e8";      // inject securely
+  const GHL_LOCATION_ID = "va82O7V3l50t4My9T2zQ"; // inject securely
+  const contextId = currentOpportunityId;      // opportunity ID
+
+  fetch(`https://services.leadconnectorhq.com/forms/upload-custom-files`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${GHL_API_KEY}`,
+      "LocationID": GHL_LOCATION_ID,
+      "OpportunityID": contextId,   // or ContactID if used on contact
+      // Do NOT set Content-Type manually; let browser set it as multipart
+    },
+    body: formData
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Upload failed: " + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Upload success
+    document.getElementById('receipt-msg').innerHTML =
+      "A team member will reach out to you to confirm your payment.<br>Window will close in 3 sec.";
+
+    // Close popup after 3 seconds
+    setTimeout(() => {
+      closeBankPopup();
+    }, 3000);
+  })
+  .catch(err => {
+    document.getElementById('receipt-msg').innerHTML =
+      "Upload failed: " + err.message;
+    console.error(err);
+  });
   }
 
   document.getElementById('receipt-msg').innerHTML='Receipt submitted for Booking #' + currentBookingNum;
