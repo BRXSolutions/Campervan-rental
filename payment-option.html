@@ -245,52 +245,25 @@ function submitReceipt() {
 
   document.getElementById('receipt-msg').innerHTML = 'Uploading...';
 
+  // Create FormData directly for the ActivePieces webhook
   const formData = new FormData();
-  const customFieldId = "EkeYHbpGrbVT5HeqDphe";
-  const fileId = "1";
+  formData.append("file", file);
+  formData.append("type", "bank_transfer_receipt_uploaded");
+  formData.append("booking", currentBookingNum);
+  formData.append("lastName", currentLastName);
+  formData.append("email", currentEmail);
+  formData.append("opportunityId", currentOpportunityId);
 
-  formData.append(customFieldId + "_" + fileId, file);
-
-  const GHL_API_KEY = "pit-ee50c887-1570-4855-bf8e-5bdc4fb396e8";
-  const GHL_LOCATION_ID = "va82O7V3l50t4My9T2zQ";
-  const contextId = currentOpportunityId;
-  const VERSION_HEADER = "2021-07-28";
-
-  fetch(`https://services.leadconnectorhq.com/forms/upload-custom-files`, {
+  // Post directly to the ActivePieces webhook
+  fetch('https://cloud.activepieces.com/api/v1/webhooks/vA2xymON3CLP2ybS3C6Vz', {
     method: "POST",
-    headers: {
-      "Authorization": `Bearer ${GHL_API_KEY}`,
-      "Version": VERSION_HEADER,
-      "LocationID": GHL_LOCATION_ID,
-      "OpportunityID": contextId
-    },
-    body: formData
+    body: formData // Do not set Content-Type header; browser sets it with boundary
   })
   .then(response => {
     if (!response.ok) throw new Error("Upload failed: " + response.status);
     return response.json();
   })
   .then(data => {
-
-    // Send event to ActivePieces instead of Slack
-    fetch('https://cloud.activepieces.com/api/v1/webhooks/vA2xymON3CLP2ybS3C6Vz', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        type: "bank_transfer_receipt_uploaded",
-        booking: currentBookingNum,
-        lastName: currentLastName,
-        email: currentEmail,
-        opportunityId: currentOpportunityId,
-        ghFileData: data
-      })
-    })
-    .catch(err => {
-      console.error("ActivePieces webhook failed:", err);
-    });
-
     document.getElementById('receipt-msg').innerHTML =
       "A team member will reach out to you to confirm your payment.<br>Window will close in 3 sec.";
 
