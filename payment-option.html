@@ -110,8 +110,6 @@ document.getElementById('verify-btn').onclick = async function(e){
 
         <div style="margin-bottom:20px;">
           <h4><strong><u>Booking Details</u></strong></h4>
-          <div><strong>Status:</strong> ${data.reservationStatus || 'N/A'}</div>
-          <div><strong>Number of Days:</strong> ${data.numberOfDays || 'N/A'}</div>
           <div><strong>Pickup Date:</strong> ${data.pickupDate || 'N/A'}</div>
           <div><strong>Pickup Time:</strong> ${data.pickupTime || 'N/A'}</div>
           <div><strong>Pickup Location:</strong> ${data.pickupLocation || 'N/A'}</div>
@@ -120,7 +118,6 @@ document.getElementById('verify-btn').onclick = async function(e){
           <div><strong>Dropoff Location:</strong> ${data.dropoffLocation || 'N/A'}</div>
           <div><strong>Total Cost:</strong> ${data.totalCost || 'N/A'}</div>
           <div><strong>Balance Due:</strong> ${data.totalBalanceDue || 'N/A'}</div>
-          <div><strong>Opportunity ID:</strong> ${data.opportunityId || 'N/A'}</div>
         </div>
 
         <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
@@ -141,15 +138,15 @@ document.getElementById('verify-btn').onclick = async function(e){
       document.getElementById('payment-buttons').innerHTML = `
         <div style="display:grid;gap:12px;">
 
-          <button onclick="payCard()" style="padding:14px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
+          <button onclick="payCard()" style="padding:14px;background:radial-gradient(circle 300px at 50% 70%, #444, #000);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
             💳 Credit / Debit Card
           </button>
 
-          <button onclick="openBankPopup()" style="padding:14px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
+          <button onclick="openBankPopup()" style="padding:14px;background:radial-gradient(circle 300px at 50% 70%, #444, #000);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
             🏦 Bank Transfer
           </button>
 
-          <button onclick="payCrypto()" style="padding:14px;background:#f59e0b;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
+          <button onclick="payCrypto()" style="padding:14px;background:radial-gradient(circle 300px at 50% 70%, #444, #000);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
             ₿ Crypto
           </button>
 
@@ -171,7 +168,7 @@ function payCard(){
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      text:`💳 Card Payment Requested\nBooking: ${currentBookingNum}\nLast Name: ${currentLastName}\nOpportunity ID: ${currentOpportunityId}`
+      text:`💳 Card Payment Requested\nBooking: ${currentBookingNum}\nLast Name: ${currentLastName}`
     })
   });
 
