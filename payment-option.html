@@ -169,10 +169,8 @@ document.getElementById('verify-btn').onclick = async function(e){
             ₿ Crypto
           </button>
           
-          <button
-    onclick="goBackToForm()"
-    style="padding:14px;background:#ededed;color:#000;border:1px solid #ddd;border-radius:8px;font-size:16px;cursor:pointer;">
-    ⏪ Pay Later / Log Out
+          <button onclick="goBackToForm()" style="padding:14px;background:#ededed;color:#000;border:1px solid #ddd;border-radius:8px;font-size:16px;cursor:pointer;">
+    Pay Later / Log Out
   </button>
         </div>
       `;
@@ -317,7 +315,7 @@ function goBackToForm() {
   if (window.opener !== null) {
     window.close();
   } else {
-    alert("You may now close this tab if you're done.");
+    alert("You will be logging out");
   }
 }
   
