@@ -148,9 +148,6 @@ let html = `
               <div><strong>Dropoff Date:</strong> ${formatDate(data.dropoffDate)}</div>
               <div><strong>Dropoff Time:</strong> ${data.dropoffTime || 'N/A'}</div>
               <div><strong>Dropoff Location:</strong> ${data.dropoffLocation || 'N/A'}</div>
-              <div><strong>Vehicle Category:</strong> ${data.vehicleCategory || 'N/A'}</div>
-              <div><strong>Vehicle Fleet Number:</strong> ${data.vehicleFleetNumber || 'N/A'}</div>
-              <div><strong>Driver License Number:</strong> ${data.driverLicenseNumber || 'N/A'}</div>
               <div><strong>Total Cost:</strong> NZD ${formatCurrency(data.totalCost)}</div>
               <div><strong>Balance Due:</strong> NZD ${formatCurrency(data.totalBalanceDue)}</div>
             </div>
