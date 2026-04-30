@@ -162,12 +162,8 @@ document.getElementById('verify-btn').onclick = async function(e){
     showError('Connection error');
   }
 };
-
-// --- PAYMENT BUTTONS & WEBHOOKS TO ACTIVEPIECES ---
-
 function payCard() {
-  openBankPopup();  // show popup
-
+  // Send to ActivePieces webhook
   fetch('https://cloud.activepieces.com/api/v1/webhooks/vA2xymON3CLP2ybS3C6Vz', {
     method: 'POST',
     headers: {
@@ -185,21 +181,32 @@ function payCard() {
     console.error('Failed to send card payment request to ActivePieces:', err);
   });
 
-  document.getElementById('receipt-msg').innerHTML =
-    "A team member will reach out to you for the credit card vault. Please check your email from our support. Window will close in 3 sec.";
+  document.getElementById('card-msg').innerHTML =
+    "A team member will reach out to you for the credit card vault. Please check your email from our support. You may now close this window.";
 
-  setTimeout(() => {
-    closeBankPopup();
-  }, 3000);
+  openCardPopup(); // show the dedicated card popup
+}
+
+function openCardPopup() {
+  document.getElementById('card-popup').style.display = 'block';
+}
+
+function closeCardPopup() {
+  document.getElementById('card-popup').style.display = 'none';
+}
+
+function closeCardPopupAndCloseTab() {
+  closeCardPopup(); // hide the popup
+
+  if (window.opener !== null) {
+    window.close();
+  } else {
+    alert("You may now close this tab manually.");
+  }
 }
 
 function openBankPopup(){
   document.getElementById('bank-popup').style.display='block';
-}
-
-function openCardPopup() {
-  document.getElementById('bank-popup').style.display = 'block';
-  payCard();
 }
 
 function openCryptoPopup() {
@@ -280,8 +287,7 @@ function submitReceipt() {
     console.error(err);
   });
 }
-
-
+  
 function payCrypto(){
 alert(
 'Crypto payment coming soon.\\\\nBooking: ' +
