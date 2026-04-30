@@ -173,9 +173,7 @@ function payCard() {
     })
   }).catch(err => console.error(err));
 
-  // Same message + close popup behavior
-  document.getElementById('receipt-msg').innerHTML =
-    "A team member will reach out to you for the credit card vault please check your email from our support.<br>Window will close in 3 sec.";
+  alert('A team member will reach out to you for the credit card vault please check your email from our support.<br>Window will close in 3 sec.');
 
   setTimeout(() => {
     closeBankPopup();
