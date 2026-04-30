@@ -164,7 +164,7 @@ document.getElementById('verify-btn').onclick = async function(e){
 };
 
 function payCard() {
-  /* Notify your internal team (e.g., Slack, ActivePieces webhook, etc) */
+  /* Notify internal team (Slack) */
   fetch('https://hooks.slack.com/services/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', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -173,7 +173,8 @@ function payCard() {
     })
   }).catch(err => console.error(err));
 
-  alert('A team member will reach out to you for the credit card vault please check your email from our support.<br>Window will close in 3 sec.');
+  document.getElementById('receipt-msg').innerHTML =
+    "A team member will reach out to you for the credit card vault. Please check your email from our support. Window will close in 3 sec.";
 
   setTimeout(() => {
     closeBankPopup();
@@ -182,6 +183,16 @@ function payCard() {
 
 function openBankPopup(){
   document.getElementById('bank-popup').style.display='block';
+}
+
+function openCardPopup() {
+  document.getElementById('bank-popup').style.display = 'block';
+  payCard();
+}
+
+function openCryptoPopup() {
+  document.getElementById('bank-popup').style.display = 'block';
+  payCrypto();
 }
 
 function closeBankPopup(){
@@ -207,7 +218,7 @@ function submitReceipt() {
   const GHL_API_KEY = "pit-ee50c887-1570-4855-bf8e-5bdc4fb396e8";
   const GHL_LOCATION_ID = "va82O7V3l50t4My9T2zQ";
   const contextId = currentOpportunityId;
-  const VERSION_HEADER = "2021-07-28"
+  const VERSION_HEADER = "2021-07-28";
 
   fetch(`https://services.leadconnectorhq.com/forms/upload-custom-files`, {
     method: "POST",
@@ -224,7 +235,7 @@ function submitReceipt() {
     return response.json();
   })
   .then(data => {
-    //  SUCCESSFUL UPLOAD: now send Slack notification
+    // SUCCESSFUL UPLOAD: now send Slack notification
     fetch("https://hooks.slack.com/services/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", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -234,7 +245,7 @@ function submitReceipt() {
     }).catch(err => console.error("Slack notification failed:", err));
 
     document.getElementById('receipt-msg').innerHTML =
-      "A team member will reach out to you to confirm your payment.<br>Window will close in 3 sec.";
+      "A team member will reach out to you to confirm your payment. Window will close in 3 sec.";
 
     setTimeout(() => {
       closeBankPopup();
@@ -246,13 +257,14 @@ function submitReceipt() {
     console.error(err);
   });
 }
+
 function payCrypto(){
-  alert(
-    'Crypto payment coming soon.\\nBooking: ' +
-    currentBookingNum +
-    '\\nOpportunity ID: ' +
-    currentOpportunityId
-  );
+alert(
+'Crypto payment coming soon.\\\\nBooking: ' +
+currentBookingNum +
+'\\\\nOpportunity ID: ' +
+currentOpportunityId
+);
 }
 
 function showError(msg){
@@ -266,3 +278,4 @@ function showError(msg){
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 </style>
+
