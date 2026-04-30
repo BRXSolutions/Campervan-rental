@@ -165,7 +165,7 @@ document.getElementById('verify-btn').onclick = async function(e){
 
 function payCard() {
   /* Notify your internal team (e.g., Slack, ActivePieces webhook, etc) */
-  fetch('YOUR_SLACK_WEBHOOK_URL', {
+  fetch('https://hooks.slack.com/services/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', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -198,42 +198,46 @@ function submitReceipt() {
     return;
   }
 
-  // Show uploading message
   document.getElementById('receipt-msg').innerHTML = 'Uploading...';
 
   const formData = new FormData();
   const customFieldId = "EkeYHbpGrbVT5HeqDphe";
-  const fileId = "1";  // simple ID; you can use UUID if you want
+  const fileId = "1";
 
   formData.append(customFieldId + "_" + fileId, file);
 
-  // These must be injected from your page or via server-side; example:
-  const GHL_API_KEY = "pit-ee50c887-1570-4855-bf8e-5bdc4fb396e8";      // inject securely
-  const GHL_LOCATION_ID = "va82O7V3l50t4My9T2zQ"; // inject securely
-  const contextId = currentOpportunityId;      // opportunity ID
+  const GHL_API_KEY = "pit-ee50c887-1570-4855-bf8e-5bdc4fb396e8";
+  const GHL_LOCATION_ID = "va82O7V3l50t4My9T2zQ";
+  const contextId = currentOpportunityId;
+  const VERSION_HEADER = "2021-07-28"
 
   fetch(`https://services.leadconnectorhq.com/forms/upload-custom-files`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${GHL_API_KEY}`,
+      "Version": VERSION_HEADER,
       "LocationID": GHL_LOCATION_ID,
-      "OpportunityID": contextId,   // or ContactID if used on contact
-      // Do NOT set Content-Type manually; let browser set it as multipart
+      "OpportunityID": contextId
     },
     body: formData
   })
   .then(response => {
-    if (!response.ok) {
-      throw new Error("Upload failed: " + response.status);
-    }
+    if (!response.ok) throw new Error("Upload failed: " + response.status);
     return response.json();
   })
   .then(data => {
-    // Upload success
+    //  SUCCESSFUL UPLOAD: now send Slack notification
+    fetch("https://hooks.slack.com/services/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", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: `🏦 Bank Transfer Receipt Uploaded\nBooking: ${currentBookingNum}\nLast Name: ${currentLastName}\nOpportunity ID: ${currentOpportunityId}`
+      })
+    }).catch(err => console.error("Slack notification failed:", err));
+
     document.getElementById('receipt-msg').innerHTML =
       "A team member will reach out to you to confirm your payment.<br>Window will close in 3 sec.";
 
-    // Close popup after 3 seconds
     setTimeout(() => {
       closeBankPopup();
     }, 3000);
@@ -243,7 +247,7 @@ function submitReceipt() {
       "Upload failed: " + err.message;
     console.error(err);
   });
-  }
+}
 function payCrypto(){
   alert(
     'Crypto payment coming soon.\\nBooking: ' +
