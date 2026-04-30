@@ -267,9 +267,13 @@ function submitReceipt() {
     document.getElementById('receipt-msg').innerHTML =
       "Thank you for your payment! A team member will reach out to you to verify your receipt.";
 
-    setTimeout(() => {
-      closeBankPopup();
-    }, 3000);
+    // Close popup and tab like in payCard
+    closeBankPopup();
+    if (window.opener !== null) {
+      window.close();
+    } else {
+      alert("You may now close this tab manually.");
+    }
   })
   .catch(err => {
     document.getElementById('receipt-msg').innerHTML =
