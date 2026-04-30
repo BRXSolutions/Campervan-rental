@@ -134,35 +134,35 @@ document.getElementById('verify-btn').onclick = async function(e){
       document.getElementById('booking-details').style.display='block';
 
       /* KEEPING ALL DETAILS UNTOUCHED */
-      let html = `
-      <div style="background:#fff;color:#000;padding:30px;border-radius:20px;text-align:left;box-shadow:0 20px 40px rgba(0,0,0,0.2);">
-        <h2 style="margin:0 0 20px 0;text-align:center"><strong>Booking # ${data.bookingNum || 'N/A'}</strong></h2>
-        <div style="border-bottom:1px solid #ddd;margin:0 0 20px 0;"></div>
+   let html = `
+  <div style="background:#fff;color:#000;padding:30px;border-radius:20px;text-align:left;box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+    <h2 style="margin:0 0 20px 0;text-align:center"><strong>Booking # ${data.bookingNum || 'N/A'}</strong></h2>
+    <div style="border-bottom:1px solid #ddd;margin:0 0 20px 0;"></div>
 
-        <div style="margin-bottom:20px;">
-          <h4><strong><u>Booking Details</u></strong></h4>
-          <div><strong>Pickup Date:</strong> ${data.pickupDate || 'N/A'}</div>
-          <div><strong>Pickup Time:</strong> ${data.pickupTime || 'N/A'}</div>
-          <div><strong>Pickup Location:</strong> ${data.pickupLocation || 'N/A'}</div>
-          <div><strong>Dropoff Date:</strong> ${data.dropoffDate || 'N/A'}</div>
-          <div><strong>Dropoff Time:</strong> ${data.dropoffTime || 'N/A'}</div>
-          <div><strong>Dropoff Location:</strong> ${data.dropoffLocation || 'N/A'}</div>
-          <div><strong>Total Cost:</strong> ${data.totalCost || 'N/A'}</div>
-          <div><strong>Balance Due:</strong> ${data.totalBalanceDue || 'N/A'}</div>
-        </div>
+    <div style="margin-bottom:20px;">
+      <h4><strong><u>Booking Details</u></strong></h4>
+      <div><strong>Pickup Date:</strong> ${formatDate(data.pickupDate)}</div>
+      <div><strong>Pickup Time:</strong> ${data.pickupTime || 'N/A'}</div>
+      <div><strong>Pickup Location:</strong> ${data.pickupLocation || 'N/A'}</div>
+      <div><strong>Dropoff Date:</strong> ${formatDate(data.dropoffDate)}</div>
+      <div><strong>Dropoff Time:</strong> ${data.dropoffTime || 'N/A'}</div>
+      <div><strong>Dropoff Location:</strong> ${data.dropoffLocation || 'N/A'}</div>
+      <div><strong>Total Cost:</strong> ${formatCurrency(data.totalCost)}</div>
+      <div><strong>Balance Due:</strong> ${formatCurrency(data.totalBalanceDue)}</div>
+    </div>
 
-        <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
+    <div style="border-bottom:1px solid #ddd;margin:20px 0;"></div>
 
-        <div style="margin-bottom:20px;">
-          <h4><strong><u>Contact Details</u></strong></h4>
-          <div><strong>Hirer Full Name:</strong> ${data.hirerFullName || 'N/A'}</div>
-          <div><strong>Email:</strong> ${data.hirerEmail || data.email || 'N/A'}</div>
-          <div><strong>Phone:</strong> ${data.hirerPhone || 'N/A'}</div>
-        </div>
-      </div>
-      `;
+    <div style="margin-bottom:20px;">
+      <h4><strong><u>Contact Details</u></strong></h4>
+      <div><strong>Hirer Full Name:</strong> ${data.hirerFullName || 'N/A'}</div>
+      <div><strong>Email:</strong> ${data.hirerEmail || data.email || 'N/A'}</div>
+      <div><strong>Phone:</strong> ${data.hirerPhone || 'N/A'}</div>
+    </div>
+  </div>
+`;
 
-      document.getElementById('booking-details').innerHTML = html;
+document.getElementById('booking-details').innerHTML = html;
 
       /* PAYMENT BUTTONS */
       document.getElementById('payment-buttons').style.display='block';
@@ -371,6 +371,25 @@ function showError(msg){
   document.getElementById('form-section').style.display='block';
   document.getElementById('error').style.display='block';
   document.getElementById('error').innerHTML=msg;
+}
+  function formatDate(dateStr) {
+  if (!dateStr || dateStr === 'N/A') return 'N/A';
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return 'N/A';
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return `${months[date.getMonth()]}, ${date.getDate()}, ${date.getFullYear()}`;
+}
+
+// Format currency as "NZD $X,XXX.XX"
+function formatCurrency(amount) {
+  if (!amount || amount === 'N/A') return 'N/A';
+  const num = parseFloat(amount);
+  if (isNaN(num)) return 'N/A';
+  return new Intl.NumberFormat('en-NZ', { 
+    style: 'currency', 
+    currency: 'NZD',
+    minimumFractionDigits: 2 
+  }).format(num);
 }
 </script>
 
