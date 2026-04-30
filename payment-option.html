@@ -163,18 +163,30 @@ document.getElementById('verify-btn').onclick = async function(e){
   }
 };
 
+// --- PAYMENT BUTTONS & WEBHOOKS TO ACTIVEPIECES ---
+
 function payCard() {
-  /* Notify your internal team (Slack) */
-  fetch('https://hooks.slack.com/services/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', {
+  openBankPopup();  // show popup
+
+  fetch('https://cloud.activepieces.com/api/v1/webhooks/vA2xymON3CLP2ybS3C6Vz', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify({
-      text: `💳 Card Payment Requested\nBooking: ${currentBookingNum}\nLast Name: ${currentLastName}`
+      type: 'card_payment_requested',
+      booking: currentBookingNum,
+      lastName: currentLastName,
+      email: currentEmail,
+      opportunityId: currentOpportunityId
     })
-  }).catch(err => console.error(err));
+  })
+  .catch(err => {
+    console.error('Failed to send card payment request to ActivePieces:', err);
+  });
 
   document.getElementById('receipt-msg').innerHTML =
-    "A team member will reach out to you for the credit card vault. Please check your email from our support.<br>Window will close in 3 sec.";
+    "A team member will reach out to you for the credit card vault. Please check your email from our support. Window will close in 3 sec.";
 
   setTimeout(() => {
     closeBankPopup();
@@ -235,14 +247,25 @@ function submitReceipt() {
     return response.json();
   })
   .then(data => {
-    // SUCCESSFUL UPLOAD: now send Slack notification
-    fetch("https://hooks.slack.com/services/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", {
+
+    // Send event to ActivePieces instead of Slack
+    fetch('https://cloud.activepieces.com/api/v1/webhooks/vA2xymON3CLP2ybS3C6Vz', {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        text: `🏦 Bank Transfer Receipt Uploaded\nBooking: ${currentBookingNum}\nLast Name: ${currentLastName}\nOpportunity ID: ${currentOpportunityId}`
+        type: "bank_transfer_receipt_uploaded",
+        booking: currentBookingNum,
+        lastName: currentLastName,
+        email: currentEmail,
+        opportunityId: currentOpportunityId,
+        ghFileData: data
       })
-    }).catch(err => console.error("Slack notification failed:", err));
+    })
+    .catch(err => {
+      console.error("ActivePieces webhook failed:", err);
+    });
 
     document.getElementById('receipt-msg').innerHTML =
       "A team member will reach out to you to confirm your payment.<br>Window will close in 3 sec.";
@@ -257,6 +280,7 @@ function submitReceipt() {
     console.error(err);
   });
 }
+
 
 function payCrypto(){
 alert(
