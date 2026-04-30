@@ -168,7 +168,12 @@ document.getElementById('verify-btn').onclick = async function(e){
           <button onclick="payCrypto()" style="padding:14px;background:radial-gradient(circle 300px at 50% 70%, #444, #000);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;">
             ₿ Crypto
           </button>
-
+          
+          <button
+    onclick="goBackToForm()"
+    style="padding:14px;background:#ededed;color:#000;border:1px solid #ddd;border-radius:8px;font-size:16px;cursor:pointer;">
+    ⏪ Pay Later / Log Out
+  </button>
         </div>
       `;
 
@@ -290,7 +295,32 @@ currentBookingNum +
 currentOpportunityId
 );
 }
+  
+function goBackToForm() {
+  // Reset UI as before
+  document.getElementById('form-section').style.display='block';
+  document.getElementById('loading').style.display='none';
+  document.getElementById('booking-details').style.display='none';
+  document.getElementById('payment-buttons').style.display='none';
+  document.getElementById('error').style.display='none';
 
+  document.getElementById('booking-input').value = '';
+  document.getElementById('lastname-input').value = '';
+
+  // Clear data
+  currentBookingNum = '';
+  currentLastName   = '';
+  currentEmail      = '';
+  currentOpportunityId = '';
+
+  // Then close the tab (or ask them to close)
+  if (window.opener !== null) {
+    window.close();
+  } else {
+    alert("You may now close this tab if you're done.");
+  }
+}
+  
 function showError(msg){
   document.getElementById('loading').style.display='none';
   document.getElementById('form-section').style.display='block';
