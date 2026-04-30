@@ -164,7 +164,7 @@ document.getElementById('verify-btn').onclick = async function(e){
 };
 
 function payCard() {
-  /* Notify internal team (Slack) */
+  /* Notify your internal team (Slack) */
   fetch('https://hooks.slack.com/services/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', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -174,7 +174,7 @@ function payCard() {
   }).catch(err => console.error(err));
 
   document.getElementById('receipt-msg').innerHTML =
-    "A team member will reach out to you for the credit card vault. Please check your email from our support. Window will close in 3 sec.";
+    "A team member will reach out to you for the credit card vault. Please check your email from our support.<br>Window will close in 3 sec.";
 
   setTimeout(() => {
     closeBankPopup();
@@ -245,7 +245,7 @@ function submitReceipt() {
     }).catch(err => console.error("Slack notification failed:", err));
 
     document.getElementById('receipt-msg').innerHTML =
-      "A team member will reach out to you to confirm your payment. Window will close in 3 sec.";
+      "A team member will reach out to you to confirm your payment.<br>Window will close in 3 sec.";
 
     setTimeout(() => {
       closeBankPopup();
@@ -278,4 +278,3 @@ function showError(msg){
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 </style>
-
