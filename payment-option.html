@@ -26,35 +26,47 @@
   <div id="payment-buttons" style="display:none;padding-top:20px;"></div>
   <div id="error" style="display:none;color:#ef4444;text-align:center;padding:20px;"></div>
 </div>
-
 <!-- BANK POPUP -->
 <div id="bank-popup" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.65);">
   <div style="background:#fff;max-width:500px;margin:60px auto;padding:30px;border-radius:16px;position:relative;">
-    
+
     <button onclick="closeBankPopup()" style="position:absolute;top:10px;right:15px;border:none;background:none;font-size:24px;cursor:pointer;">×</button>
 
     <h3 style="margin-top:0;text-align:center;">Bank Transfer</h3>
     <div style="border-bottom:1px solid #ddd;margin:15px 0;"></div>
 
-    <div style="line-height:1.8;">
+    <!-- Option selector -->
+    <div style="margin-bottom:15px;">
+      <label style="font-weight:bold;display:block;margin-bottom:5px;">Payment Method:</label>
+      <select id="bank-method" onchange="handleBankMethodChange()" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;">
+        <option value="">Choose method</option>
+        <option value="anz">ANZ Bank New Zealand Limited</option>
+        <option value="wise">Wise Transfer</option>
+      </select>
+    </div>
+
+    <!-- ANZ details (shown only when ANZ is selected) -->
+    <div id="anz-details" style="display:none;line-height:1.8;">
       <strong>Bank Name:</strong> ANZ Bank New Zealand Limited<br>
-      <strong>Account Name:</strong>  WAKA CAMPA LTD<br>
+      <strong>Account Name:</strong> WAKA CAMPA LTD<br>
       <strong>Account Number:</strong> 01-0142-0696381-00<br>
       <strong>BIC / SWIFT:</strong> ANZBNZ22<br>
-      <strong>Note:</strong> Please ensure that any bank transfer fees are covered on your end, as we must receive the full amount due for the booking.<br>
-      You can choose to pay later by closing this window and come back whenever you're ready.
+      <strong>Note:</strong> Please ensure that any bank transfer fees are covered on your end, as we must receive the full amount due for the booking.
     </div>
 
-    <div style="margin-top:20px;">
+    <div id="wise-note" style="display:none;margin-top:10px;color:#666;">
+      You will be redirected to Wise to complete the payment. After payment, come back here and upload your receipt.
+    </div>
+
+    <div id="receipt-section" style="margin-top:20px;display:none;">
       <label style="font-weight:bold;display:block;margin-bottom:8px;">Upload Payment Receipt</label>
       <input type="file" id="receipt-file" style="width:100%;">
+      <button onclick="submitReceipt()" style="margin-top:12px;width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
+        Submit Receipt
+      </button>
+      <div id="receipt-msg" style="margin-top:12px;text-align:center;"></div>
     </div>
 
-    <button onclick="submitReceipt()" style="margin-top:20px;width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;">
-      Submit Receipt
-    </button>
-
-    <div id="receipt-msg" style="margin-top:12px;text-align:center;"></div>
   </div>
 </div>
 
@@ -317,6 +329,41 @@ function goBackToForm() {
   } else {
     alert("You will be logging out");
   }
+}
+  
+function handleBankMethodChange() {
+  const method = document.getElementById("bank-method").value;
+  const anzDetailsEl = document.getElementById("anz-details");
+  const wiseNoteEl   = document.getElementById("wise-note");
+  const receiptSectionEl = document.getElementById("receipt-section");
+
+  if (method === "anz") {
+    anzDetailsEl.style.display = "block";
+    wiseNoteEl.style.display = "none";
+    receiptSectionEl.style.display = "block";
+  } else if (method === "wise") {
+    anzDetailsEl.style.display = "none";
+    wiseNoteEl.style.display = "block";
+    receiptSectionEl.style.display = "block";
+
+    // Open Wise in new tab, then close this popup after user comes back
+    setTimeout(() => {
+      window.open("https://wise.com/pay/business/wakacampalimited", "_blank");
+    }, 600);
+
+  } else {
+    anzDetailsEl.style.display = "none";
+    wiseNoteEl.style.display = "none";
+    receiptSectionEl.style.display = "none";
+  }
+}
+
+// Keep your existing openBankPopup function:
+function openBankPopup(){
+  document.getElementById('bank-popup').style.display='block';
+  // reset the selector and sections
+  document.getElementById("bank-method").value = "";
+  handleBankMethodChange();
 }
   
 function showError(msg){
